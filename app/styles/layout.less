@@ -1,0 +1,95 @@
+/* alignment */
+.clear {clear:both;}
+.align-left { float: left; }
+.align-right { float: right; }
+.align-center {margin-left:auto;margin-right:auto;}
+.text-align-left { text-align: left; }
+.text-align-center { text-align: center; }
+.text-align-right { text-align: right; }
+
+/* Basics */
+body {.nm;}
+header,footer, .row, .page, .box-model-block {
+    overflow: hidden;
+    _overflow: visible;
+    zoom: 1;
+}
+*, *:before, *:after, .border-box, input[type="search"] {
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box
+}
+/* boxes */
+.full { width: 100%; }
+.half { width: 50%; }
+.third { width:33% }
+.two-thirds { width:66% }
+.quarter { width:25%; }
+.three-quarters { width:75%; }
+
+.wrapper {
+    max-width: @width-largest;
+    *width: @width-largest;
+    margin: 0 auto;
+}
+.border-top {
+    border-top:1px solid @borders;
+    .mt;
+    .mb;
+}
+.border-bottom {
+    border-bottom:1px solid @borders;
+    .mt;
+    .mb;
+}
+/* General flex containers */
+.flex-container (@direction: 'row', @mobile-direction: 'column') {
+  display: -webkit-flex;
+  display:flex;
+  -webkit-flex-direction:@direction;
+  flex-direction:@direction;
+  @media only screen and(max-width:@width-mobile) {
+    -webkit-flex-direction:@mobile-direction;
+    flex-direction:@mobile-direction;
+  }
+}
+.flex-container-column {.flex-container('column','column')}
+.flex-container-row {.flex-container('row','row')}
+.flex-container-col-resp {.flex-container('column','row')}
+.flex-container-row-resp {
+  .flex-container('row','column')
+  .quarter,
+  .three-quarters,
+  .half,
+  .third,
+  .two-thirds {
+    .full;
+  }
+}
+
+.no-flexbox {
+    .flex-container-row, .flex-container-row-resp {
+        .clear;
+        > * {
+            .align-left;
+            @media only screen and(max-width:@width-mobile) {
+                float:none;
+            }
+        }
+    }
+}
+
+.print-only, .mobile-show, .tablet-show  {display:none;}
+.desktop-show { display:block; }
+
+@media only screen and (max-width: @width-largest){
+	.wrapper { width:96%; }
+}
+@media only screen and (max-width: @width-tablet) {
+        .desktop-show { display:none; }
+        .tablet-show { display:block; }
+}
+@media only screen and(max-width:@width-mobile) {
+  .tablet-show, .desktop-show{display:none;}
+  .mobile-show {display:block;}
+}

@@ -1,0 +1,31 @@
+{
+  "minify": true,
+  "options": [
+    "html5shiv",
+    "setClasses"
+  ],
+  "feature-detects": [
+    "test/canvas",
+    "test/svg",
+    "test/css/boxshadow",
+    "test/css/boxsizing",
+    "test/css/calc",
+    "test/css/flexbox",
+    "test/css/fontface",
+    "test/css/generatedcontent",
+    "test/css/lastchild",
+    "test/css/overflow-scrolling",
+    "test/css/remunit",
+    "test/css/vhunit",
+    "test/css/vmaxunit",
+    "test/css/vminunit",
+    "test/css/vwunit",
+    "test/forms/fileinput",
+    "test/forms/formattribute",
+    "test/forms/placeholder",
+    "test/img/apng",
+    "test/storage/localstorage",
+    "test/svg/clippaths",
+    "test/svg/inline"
+  ]
+}

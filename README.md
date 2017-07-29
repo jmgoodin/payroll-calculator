@@ -1,4 +1,4 @@
-# Payroll calculator exercis
+# Payroll calculator exercise
 
 ## Scope
 

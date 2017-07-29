@@ -8,12 +8,15 @@ var gutil = require('gulp-util');
 var babelify = require('babelify');
 var less = require('gulp-less');
 var browserSync = require('browser-sync').create();
+var jest = require('gulp-jest').default;
+var jasmine = require('gulp-jasmine');
+var Server = require('karma').Server;
 
 // External dependencies you do not want to rebundle while developing,
 // but include in your application deployment
 var dependencies = [
 	'react',
-  	'react-dom'
+  'react-dom'
 ];
 // keep a count of the times a task refires
 var scriptsCount = 0;
@@ -37,8 +40,9 @@ gulp.task('less', function() {
 });
 
 gulp.task('watch', function () {
-	gulp.watch(['./app/**/*.jsx'], ['scripts']);
+	gulp.watch(['./app/**/*.jsx'], ['scripts', 'test']);
   gulp.watch(['./app/styles/**/*.less'], ['less']);
+	gulp.watch(['./test/**/*.spec.js'], ['test'])
 });
 
 gulp.task('browser-sync', function () {
@@ -52,7 +56,7 @@ gulp.task('browser-sync', function () {
 // When running 'gulp' on the terminal this task will fire.
 // It will start watching for changes in every .js file.
 // If there's a change, the task 'scripts' defined above will fire.
-gulp.task('default', ['scripts', 'less', 'browser-sync', 'watch']);
+gulp.task('default', ['scripts', 'less', 'browser-sync', 'test', 'watch']);
 
 // Private Functions
 // ----------------------------------------------------------------------------
@@ -90,9 +94,12 @@ function bundleApp(isProduction) {
 
     return appBundler
   		// transform ES6 and JSX to ES5 with babelify
-	  	.transform("babelify", {presets: ["es2015", "react"]})
+	  	.transform('babelify', {presets: ['react', 'es2015', 'stage-0']})
 	    .bundle()
 	    .on('error',gutil.log)
 	    .pipe(source('bundle.js'))
 	    .pipe(gulp.dest('./web/js/'));
 }
+gulp.task('test', function (done) {
+	return gulp.src('./test/').pipe(jest());
+});

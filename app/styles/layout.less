@@ -53,19 +53,25 @@ header,footer, .row, .page, .box-model-block {
     flex-direction:@mobile-direction;
   }
 }
-.flex-container-column {.flex-container('column','column')}
-.flex-container-row {.flex-container('row','row')}
-.flex-container-col-resp {.flex-container('column','row')}
+.flex-container-column {.flex-container(column,column);}
+.flex-container-row {.flex-container(row,row);}
+.flex-container-col-resp {.flex-container(column,row);}
 .flex-container-row-resp {
-  .flex-container('row','column')
-  .quarter,
-  .three-quarters,
-  .half,
-  .third,
-  .two-thirds {
-    .full;
+  .flex-container(row,column);
+  @media only screen and(max-width:@width-mobile) {
+    .quarter,
+    .three-quarters,
+    .half,
+    .third,
+    .two-thirds {
+      .full;
+    }
   }
 }
+.space-between { justify-content: space-between; }
+.flex-end { justify-content: flex-end; }
+.align-end { align-items: flex-end; }
+.flex-wrap { flex-wrap: wrap;}
 
 .no-flexbox {
     .flex-container-row, .flex-container-row-resp {

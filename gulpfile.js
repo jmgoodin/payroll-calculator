@@ -9,8 +9,6 @@ var babelify = require('babelify');
 var less = require('gulp-less');
 var browserSync = require('browser-sync').create();
 var jest = require('gulp-jest').default;
-var jasmine = require('gulp-jasmine');
-var Server = require('karma').Server;
 
 // External dependencies you do not want to rebundle while developing,
 // but include in your application deployment
@@ -66,6 +64,7 @@ function bundleApp(isProduction) {
 	// us use modules in the front end.
 	var appBundler = browserify({
     	entries: './app/index.jsx',
+			extensions: [".js", ".jsx"],
     	debug: true
   	})
 
@@ -94,12 +93,16 @@ function bundleApp(isProduction) {
 
     return appBundler
   		// transform ES6 and JSX to ES5 with babelify
-	  	.transform('babelify', {presets: ['react', 'es2015', 'stage-0']})
+	  	.transform(babelify.configure({
+        presets : ["es2015", "react", "stage-0"],
+				plugins : ["transform-class-properties"]
+    	}))
 	    .bundle()
 	    .on('error',gutil.log)
 	    .pipe(source('bundle.js'))
 	    .pipe(gulp.dest('./web/js/'));
 }
+
 gulp.task('test', function (done) {
 	return gulp.src('./test/').pipe(jest());
 });

@@ -14,6 +14,7 @@ const AppTitle = () => (
   <AppBar
     title="Payroll calculator"
     showMenuIconButton={false}
+    className="bg-gradient"
   />
 );
 

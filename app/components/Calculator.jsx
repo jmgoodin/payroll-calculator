@@ -4,6 +4,16 @@ import FlatButton from 'material-ui/FlatButton';
 import {Card, CardText, CardActions} from 'material-ui/Card';
 import Payslip from './Payslip.jsx';
 
+//set accessible colours for form elements
+const styles = {
+    floatingLabelFocusStyle: {
+        color: "#0A8299"
+    },
+    floatingLabelStyle: {
+        color: "#747474"
+    }
+
+}
 class Calculator extends React.Component {
   constructor(props) {
     super(props);
@@ -12,7 +22,7 @@ class Calculator extends React.Component {
       surname:'',
       salary: '',
       superPercent: 9.5,
-      starteDate: '',
+      startDate: '',
       showPayslip: false,
       class: 'NORMAL'
     }
@@ -38,11 +48,7 @@ class Calculator extends React.Component {
   }
   renderPayslip() {
     return (
-      <Card className="mt">
-        <CardText>
-          <Payslip firstName={this.state.firstName} surname={this.state.surame} salary={this.state.salary} superPercent={this.state.superPercent} startDate={this.state.startDate} />
-        </CardText>
-      </Card>
+      <Payslip firstName={this.state.firstName} surname={this.state.surname} salary={this.state.salary} superPercent={this.state.superPercent} startDate={this.state.startDate} />
     )
   }
 
@@ -50,17 +56,24 @@ class Calculator extends React.Component {
   render() {
     return (
       <div>
-        <Card className="mt">
+        <Card className="mtb">
 
           <form >
             <fieldset>
               <CardText>
                 <legend>Enter employee details</legend>
-                <TextField  floatingLabelText="First name" name="firstName" value={this.state.firstName} onChange={this.handleInputChange} />
-                <TextField  floatingLabelText="Surname" name="surname" value={this.state.surname} onChange={this.handleInputChange} />
-                <TextField  floatingLabelText="Annual salary" name="salary" type="number" value={this.state.salary} onChange={this.handleInputChange} />
-                <TextField  floatingLabelText="Super percentage"  name="superPercent" type="number" value={this.state.superPercent} onChange={this.handleInputChange}/>
-                <TextField  floatingLabelText="Start date"  name="startDate" type="date" floatingLabelFixed = {true}  value={this.state.startDate} onChange={this.handleInputChange} />
+                <div className="flex-container-row-resp flex-wrap">
+                  <TextField floatingLabelStyle={styles.floatingLabelStyle} floatingLabelFocusStyle={styles.floatingLabelFocusStyle} className="half"
+                            floatingLabelText="First name" name="firstName" value={this.state.firstName} onChange={this.handleInputChange} />
+                  <TextField floatingLabelStyle={styles.floatingLabelStyle} floatingLabelFocusStyle={styles.floatingLabelFocusStyle} className="half"
+                            floatingLabelText="Surname" name="surname" value={this.state.surname} onChange={this.handleInputChange} />
+                  <TextField floatingLabelStyle={styles.floatingLabelStyle} floatingLabelFocusStyle={styles.floatingLabelFocusStyle} className="half"
+                            floatingLabelText="Annual salary" name="salary" type="number" value={this.state.salary} onChange={this.handleInputChange} />
+                  <TextField floatingLabelStyle={styles.floatingLabelStyle} floatingLabelFocusStyle={styles.floatingLabelFocusStyle} className="half"
+                            floatingLabelText="Super percentage"  name="superPercent" type="number" value={this.state.superPercent} onChange={this.handleInputChange}/>
+                  <TextField  floatingLabelStyle={styles.floatingLabelStyle} floatingLabelFocusStyle={styles.floatingLabelFocusStyle} className="half"
+                            floatingLabelText="Start date"  name="startDate" type="date" floatingLabelFixed = {true}  value={this.state.startDate} onChange={this.handleInputChange} />
+                </div>
               </CardText>
               <CardActions>
                 <FlatButton onClick={this.handleFormSubmit} label="Generate payslip" />

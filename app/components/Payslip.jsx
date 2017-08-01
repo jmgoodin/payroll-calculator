@@ -6,6 +6,7 @@ import map  from 'lodash/map';
 import has  from 'lodash/has';
 import sum  from 'lodash/sum';
 import request from 'superagent';
+import moment from 'moment';
 import AppBar from 'material-ui/AppBar';
 import {Card, CardHeader, CardText, CardActions} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
@@ -84,13 +85,15 @@ export default class Payslip extends React.Component {
     var grossEarnings = this.calculateGross(toNumber(this.props.salary)),
         taxPaid = this.calculateTax(toNumber(this.props.salary)),
         netPay = this.calculateNet(grossEarnings, taxPaid),
-        superPaid = this.calculateSuper(toNumber(this.props.salary), toNumber(this.props.superPercent));
+        superPaid = this.calculateSuper(toNumber(this.props.salary), toNumber(this.props.superPercent)),
+        payDate = moment().format("DD MMM YYYY");
+
 
     return (
       <section>
         <h2 className="payslip-heading">Payslip</h2>
         <Card className="mbd">
-          <CardHeader title="Cindertom creations"
+          <CardHeader title="Jodi McJoderson Pty Ltd"
                       subtitle="ABN 10 100 100 100" />
           <CardText>
             <div className="payee-details box-model-block">
@@ -98,6 +101,7 @@ export default class Payslip extends React.Component {
               <ul className="no-list-style">
                 <li>{this.props.firstName} {this.props.surname}</li>
                 <li>Annual salary: {this.props.salary}</li>
+                <li>Pay rate: ${grossEarnings} per month</li>
               </ul>
             </div>
             <div className="pay-overview box-model-block">
@@ -109,19 +113,23 @@ export default class Payslip extends React.Component {
             </div>
             <div className="pay-details box-model-block">
               <h3>Wages</h3>
+              <p>Pay date {payDate} </p>
               <ul className="no-list-style flex-container-column align-end payslip-row">
                 <li>Total earnings ${grossEarnings}</li>
                 <li>Net pay ${netPay}</li>
+                <li>Loadings, bonuses allowances $0</li>
               </ul>
             </div>
             <div className="tax-details box-model-block">
-              <h3>PAYG Tax</h3>
+              <h3>PAYG Tax and deductions</h3>
               <ul className="no-list-style flex-container-column align-end payslip-row">
                 <li>Tax withheld ${taxPaid}</li>
+                <li>Deductions $0</li>
               </ul>
             </div>
             <div className="super-details box-model-block">
               <h3>Superannuation</h3>
+              <p>Super Super - it's a super company<br />Account:100000</p>
               <ul className="no-list-style flex-container-column align-end payslip-row">
                 <li>Employer contribution ${superPaid}</li>
               </ul>

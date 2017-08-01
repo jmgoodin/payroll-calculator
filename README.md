@@ -13,6 +13,9 @@
 - Pay periods are set per calendar month. This is currently limited to three months in the past and three months in the future (although can be configured)
 - No fields are required, any part of the calculator can be used without the others, limiting it to functionality based solely on what is entered
 
+## Demo
+[Try out the demo](https://jmgoodin.github.io/payroll-calculator/demo/)
+
 ## To run app
 
 To setup your machine, you just need first to get node and npm installed and **git clone** this repo.

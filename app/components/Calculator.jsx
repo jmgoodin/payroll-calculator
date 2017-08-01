@@ -1,7 +1,14 @@
 import React from 'react';
+import moment from 'moment';
+import map  from 'lodash/map';
+import join  from 'lodash/join';
+import find  from 'lodash/find';
+import has from 'lodash/has';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import {Card, CardText, CardActions} from 'material-ui/Card';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import Payslip from './Payslip.jsx';
 
 //set accessible colours for form elements
@@ -14,38 +21,89 @@ const styles = {
     }
 
 }
+const monthsInPast = 3;
+const monthsInFuture = 3;
+
+const payPeriods =  createPayPeriods();
+function  createPayPeriods() {
+  var payPeriods = [],
+      date = new Date(),
+      period = moment(date).subtract(monthsInPast,'months');
+  // for the configurable months before and after as well as this month
+  for(var i=0;i<(monthsInPast + monthsInFuture + 1);i++) {
+    var currentYear = moment(period).format('YYYY'),
+        currentMonth = moment(period).format('M'),
+        startDate = moment([currentYear, currentMonth - 1]).format('DD MMM YYYY'),
+        endDate = moment(startDate).endOf('month').format('DD MMM YYYY'),
+        newPeriod = {
+          "text": join([startDate, endDate], '-'),
+          "value": currentMonth
+        };
+    payPeriods.push(newPeriod);
+    period = moment(period).add(1, 'months');
+  }
+  return(payPeriods);
+};
+
 class Calculator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName:'',
-      surname:'',
-      salary: '',
       superPercent: 9.5,
-      startDate: '',
-      showPayslip: false,
-      class: 'NORMAL'
+      showPayslip: false
     }
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
-  handleInputChange(event) {
+
+  renderPayPeriods() {
+    return payPeriods.map((period) => (
+      <MenuItem
+        key={period.value}
+        insetChildren={true}
+        value={period.value}
+        primaryText={period.text}
+        checked={this.state.startDateValue === period.value}
+      />
+    ));
+  }
+  validateTextField = (name,value) => {
+    switch(name) {
+      case 'superPercent' : {
+        if(value > 50) {
+          this.setState({
+            superHint: "Super percentage can only be 50% or less"
+          })
+          return false;
+        }
+      }
+      default:
+        return true;
+    }
+  }
+  handleInputChange = (event) => {
 
     const target = event.target;
     const value = target.value;
     const name = target.name;
 
+    var valid = this.validateTextField(name,value);
+    if (valid) {
+      this.setState({
+        [name]: value
+      });
+    }
+  }
+  handleSelectChange = (event, index, value) => {
     this.setState({
-      [name]: value
+      startDateValue: value,
+      startDate: find(payPeriods,{'value': value}).text
     });
   }
-  handleFormSubmit() {
+
+  handleFormSubmit = () => {
     this.setState({showPayslip: true});
   }
-  sum(a, b) {
-    return a + b;
-  }
+
   renderPayslip() {
     return (
       <Payslip firstName={this.state.firstName} surname={this.state.surname} salary={this.state.salary} superPercent={this.state.superPercent} startDate={this.state.startDate} />
@@ -56,7 +114,8 @@ class Calculator extends React.Component {
   render() {
     return (
       <div>
-        <Card className="mtb">
+
+        <Card className="mtb calc-form">
 
           <form >
             <fieldset>
@@ -67,16 +126,34 @@ class Calculator extends React.Component {
                             floatingLabelText="First name" name="firstName" value={this.state.firstName} onChange={this.handleInputChange} />
                   <TextField floatingLabelStyle={styles.floatingLabelStyle} floatingLabelFocusStyle={styles.floatingLabelFocusStyle} className="half"
                             floatingLabelText="Surname" name="surname" value={this.state.surname} onChange={this.handleInputChange} />
-                  <TextField floatingLabelStyle={styles.floatingLabelStyle} floatingLabelFocusStyle={styles.floatingLabelFocusStyle} className="half"
+                  <SelectField
+                    floatingLabelStyle={styles.floatingLabelStyle}
+                    floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+                    floatingLabelText="Pay period"
+                    value={this.state.startDateValue}
+                    name="startDate"
+                    onChange={this.handleSelectChange}
+                    className="half"
+                    floatingLabelStyle={styles.floatingLabelStyle}
+                    floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+                  >
+                    {this.renderPayPeriods()}
+                  </SelectField>
+                  <div className="half flex-container-row align-baseline">
+                      <div className="input-decorator left">$</div>
+                      <TextField floatingLabelStyle={styles.floatingLabelStyle} floatingLabelFocusStyle={styles.floatingLabelFocusStyle} className="full"
                             floatingLabelText="Annual salary" name="salary" type="number" value={this.state.salary} onChange={this.handleInputChange} />
-                  <TextField floatingLabelStyle={styles.floatingLabelStyle} floatingLabelFocusStyle={styles.floatingLabelFocusStyle} className="half"
-                            floatingLabelText="Super percentage"  name="superPercent" type="number" value={this.state.superPercent} onChange={this.handleInputChange}/>
-                  <TextField  floatingLabelStyle={styles.floatingLabelStyle} floatingLabelFocusStyle={styles.floatingLabelFocusStyle} className="half"
-                            floatingLabelText="Start date"  name="startDate" type="date" floatingLabelFixed = {true}  value={this.state.startDate} onChange={this.handleInputChange} />
+                  </div>
+                  <div className="half flex-container-row align-baseline">
+                      <TextField floatingLabelStyle={styles.floatingLabelStyle} floatingLabelFocusStyle={styles.floatingLabelFocusStyle} className="full"
+                            floatingLabelText="Super percentage"  name="superPercent" type="number" value={this.state.superPercent} onChange={this.handleInputChange}
+                            hintText={this.state.superHint} />
+                      <div className="input-decorator right">%</div>
+                  </div>
                 </div>
               </CardText>
               <CardActions>
-                <FlatButton onClick={this.handleFormSubmit} label="Generate payslip" />
+                <FlatButton id="generatePayslip" onClick={(e) => this.handleFormSubmit(e)} label="Generate payslip" />
               </CardActions>
             </fieldset>
           </form>

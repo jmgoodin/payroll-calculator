@@ -8,6 +8,7 @@ import sum  from 'lodash/sum';
 import request from 'superagent';
 import AppBar from 'material-ui/AppBar';
 import {Card, CardHeader, CardText, CardActions} from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
 import Loader from './Loader.jsx';
 
 export default class Payslip extends React.Component {
@@ -69,9 +70,12 @@ export default class Payslip extends React.Component {
     return(round(grossPay - tax));
   }
   calculateSuper(grossPay, superPercent) {
-    if(!isFinite(grossPay) && !isFinite(superPercent)) {return 0;}
+    if(!isFinite(grossPay) || !isFinite(superPercent)) {return 0;}
     if(grossPay <= 0 || superPercent <= 0) {return 0;}
     return(round(grossPay * (superPercent / 100)));
+  }
+  printManager(){
+    window.print(0);
   }
 
   render() {
@@ -84,11 +88,10 @@ export default class Payslip extends React.Component {
 
     return (
       <section>
-        <h2>Payslip</h2>
+        <h2 className="payslip-heading">Payslip</h2>
         <Card className="mbd">
           <CardHeader title="Cindertom creations"
-                      subtitle="ABN 10 100 100 100"
-                      avatar="" />
+                      subtitle="ABN 10 100 100 100" />
           <CardText>
             <div className="payee-details box-model-block">
               <h3>Payee details</h3>
@@ -113,17 +116,20 @@ export default class Payslip extends React.Component {
             </div>
             <div className="tax-details box-model-block">
               <h3>PAYG Tax</h3>
-              <ul className="no-list-style flex-container-row-resp flex-end payslip-row">
+              <ul className="no-list-style flex-container-column align-end payslip-row">
                 <li>Tax withheld ${taxPaid}</li>
               </ul>
             </div>
             <div className="super-details box-model-block">
               <h3>Superannuation</h3>
-              <ul className="no-list-style flex-container-row-resp flex-end payslip-row">
+              <ul className="no-list-style flex-container-column align-end payslip-row">
                 <li>Employer contribution ${superPaid}</li>
               </ul>
             </div>
           </CardText>
+          <CardActions className="print-action">
+            <RaisedButton id="print" onClick={(e) => this.printManager(e)} label="Print payslip" />
+          </CardActions>
         </Card>
       </section>
     );

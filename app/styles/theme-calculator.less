@@ -10,9 +10,20 @@
 }
 .flex-container-row-resp {
   .half { width: 48% !important;  margin-right:2%;}
+  .full { width: 100% !important; }
   @media only screen and(max-width:@width-mobile) {
     .half {
       width: 100% !important; .nmr;
     }
+  }
+}
+.input-decorator {
+  font-size:16px;
+  color:@grey-dark;
+  &.left {
+    margin-right:5px;
+  }
+  &.right {
+    margin-left:5px;
   }
 }

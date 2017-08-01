@@ -14,7 +14,9 @@ var jest = require('gulp-jest').default;
 // but include in your application deployment
 var dependencies = [
 	'react',
-  'react-dom'
+  'react-dom',
+	'material-ui',
+	'react-tap-event-plugin'
 ];
 // keep a count of the times a task refires
 var scriptsCount = 0;

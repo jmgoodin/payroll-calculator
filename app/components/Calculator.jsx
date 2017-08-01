@@ -27,14 +27,12 @@ const monthsInFuture = 3;
 const payPeriods =  createPayPeriods();
 function  createPayPeriods() {
   var payPeriods = [],
-      date = new Date(),
-      period = moment(date).subtract(monthsInPast,'months');
+      period = moment().subtract(monthsInPast,'months');
   // for the configurable months before and after as well as this month
   for(var i=0;i<(monthsInPast + monthsInFuture + 1);i++) {
-    var currentYear = moment(period).format('YYYY'),
-        currentMonth = moment(period).format('M'),
-        startDate = moment([currentYear, currentMonth - 1]).format('DD MMM YYYY'),
-        endDate = moment(startDate).endOf('month').format('DD MMM YYYY'),
+    var currentMonth = moment(period).format('M'),
+        startDate = moment(period).startOf('month').format('DD MMM YYYY'),
+        endDate = moment(period).endOf('month').format('DD MMM YYYY'),
         newPeriod = {
           "text": join([startDate, endDate], '-'),
           "value": currentMonth
@@ -71,7 +69,7 @@ class Calculator extends React.Component {
       case 'superPercent' : {
         if(value > 50) {
           this.setState({
-            superHint: "Super percentage can only be 50% or less"
+            superHint: "This can only be 50% or less"
           })
           return false;
         }

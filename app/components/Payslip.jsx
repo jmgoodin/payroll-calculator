@@ -8,7 +8,7 @@ import sum  from 'lodash/sum';
 import request from 'superagent';
 import AppBar from 'material-ui/AppBar';
 import {Card, CardHeader, CardText, CardActions} from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import Loader from './Loader.jsx';
 
 export default class Payslip extends React.Component {
@@ -128,7 +128,7 @@ export default class Payslip extends React.Component {
             </div>
           </CardText>
           <CardActions className="print-action">
-            <RaisedButton id="print" onClick={(e) => this.printManager(e)} label="Print payslip" />
+            <FlatButton id="print" onClick={(e) => this.printManager(e)} label="Print payslip" />
           </CardActions>
         </Card>
       </section>

@@ -4,7 +4,7 @@
 var gulp = require('gulp');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
-var gutil = require('gulp-util');
+var log = require('fancy-log');
 var babelify = require('babelify');
 var less = require('gulp-less');
 var browserSync = require('browser-sync').create();
@@ -80,7 +80,7 @@ function bundleApp(isProduction) {
 			debug: true
 		})
 			.bundle()
-			.on('error', gutil.log)
+			.on('error', function(err){log(err);})
 			.pipe(source('vendors.js'))
 			.pipe(gulp.dest('./web/js/'));
   	}
@@ -96,11 +96,11 @@ function bundleApp(isProduction) {
     return appBundler
   		// transform ES6 and JSX to ES5 with babelify
 	  	.transform(babelify.configure({
-        presets : ["es2015", "react", "stage-0"],
+        presets : ["env", "react", "stage-0"],
 				plugins : ["transform-class-properties"]
     	}))
 	    .bundle()
-	    .on('error',gutil.log)
+	    .on('error', function(err){log(err);})
 	    .pipe(source('bundle.js'))
 	    .pipe(gulp.dest('./web/js/'));
 }

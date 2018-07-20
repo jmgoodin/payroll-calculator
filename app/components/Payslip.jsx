@@ -85,7 +85,7 @@ export default class Payslip extends React.Component {
     var grossEarnings = this.calculateGross(toNumber(this.props.salary)),
         taxPaid = this.calculateTax(toNumber(this.props.salary)),
         netPay = this.calculateNet(grossEarnings, taxPaid),
-        superPaid = this.calculateSuper(toNumber(this.props.salary), toNumber(this.props.superPercent)),
+        superPaid = this.calculateSuper(toNumber(grossEarnings), toNumber(this.props.superPercent)),
         payDate = moment().format("DD MMM YYYY");
 
 
